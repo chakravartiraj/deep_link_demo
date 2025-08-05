@@ -1,0 +1,65 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
+import 'package:flutter/material.dart';
+///////////////////////////////////////////////////////////////////////////////
+/// Please make sure to follow the setup instructions below
+///
+/// Please take a look at:
+/// - example/android/app/main/AndroidManifest.xml for Android.
+///
+/// - example/ios/Runner/Runner.entitlements for Universal Link sample.
+/// - example/ios/Runner/Info.plist for Custom URL scheme sample.
+///
+/// Android launch:
+///    adb shell am start -a android.intent.action.VIEW \
+///     -d "sample://open.my.app/#/book/hello-world"
+///
+/// iOS launch:
+///    /usr/bin/xcrun simctl openurl booted "app://www.example.com/#/book/hello-world"
+///
+///
+/// Windows & macOS launch:
+///   The simplest way to test it is by
+///   opening your browser and type: sample://foo/#/book/hello-world2
+///
+/// On windows:
+/// Outside of a browser, in a email for example, you can use:
+/// https://example.com/#/book/hello-world2
+///////////////////////////////////////////////////////////////////////////////
+
+class AppLinksService {
+  static final AppLinksService _instance = AppLinksService._internal();
+  factory AppLinksService() => _instance;
+
+  final AppLinks _appLinks = AppLinks();
+
+  AppLinksService._internal();
+
+  Future<Uri?> getInitialLink() {
+    return _appLinks.getInitialLink();
+  }
+
+  Stream<Uri> get allLinks {
+    return _appLinks.uriLinkStream;
+  }
+
+  StreamSubscription<Uri>? _linkSubscription;
+
+  void initDeepLinks({Function(Uri)? onLink}) {
+    // Handle links
+    _linkSubscription = allLinks.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      if(onLink!=null) {
+        // Handle the incoming deep link (e.g., navigate to a specific screen)
+        onLink(uri);
+      }
+    });
+  }
+
+  void dispose(){
+    _linkSubscription?.cancel();
+  }
+
+
+}

@@ -1,0 +1,51 @@
+import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
+import 'dart:async';
+import '/home_page.dart';
+import '/details_page.dart';
+import '/profile_page.dart';
+import '/deeplink_page.dart';
+import '/error_page.dart';
+
+// 1. Single place to expose the stream
+final _appLinks = AppLinks();
+final _deepLinkStream = _appLinks.uriLinkStream;
+
+// 2. Router configuration
+final GoRouter appRouter = GoRouter(
+  // Let the OS give us the initial route automatically.
+  // (No redirect needed; go_router will read the intent.)
+  debugLogDiagnostics: kDebugMode,
+  refreshListenable: GoRouterRefreshStream(_deepLinkStream),
+
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (_, __) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/details/:id',
+      builder: (_, state) {
+        final id = state.pathParameters['id']!;
+        return DetailsPage(detailId: id);
+      },
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (_, __) => const ProfilePage(),
+    ),
+    GoRoute(
+      path: '/deeplink',
+      builder: (_, state) => DeepLinkPage(queryParams: state.uri.queryParameters),
+    ),
+  ],
+  errorBuilder: (_, __) => const ErrorPage(),
+);
+
+/// Tiny helper that wraps a Stream&lt;Uri&gt; as Listenable for refreshListenable.
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<Uri> stream) {
+    stream.listen((_) => notifyListeners());
+  }
+}

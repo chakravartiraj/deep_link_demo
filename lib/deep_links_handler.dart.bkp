@@ -1,0 +1,47 @@
+import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:myapp/deep_links_service.dart';
+
+///
+class DeepLinkHandler extends StatefulWidget {
+  final Widget child;
+  const DeepLinkHandler({super.key, required this.child});
+
+  @override
+  State<DeepLinkHandler> createState() => _DeepLinkHandlerState();
+}
+
+class _DeepLinkHandlerState extends State<DeepLinkHandler> {
+  // late final AppLinks _appLinks = AppLinks();
+  // late final Stream<Uri> _linkStream = _appLinks.uriLinkStream;
+
+  @override
+  void initState() {
+    super.initState();
+    // initial link when app is started from cold
+    // _appLinks.getInitialAppLink().then(_handleUri);
+    AppLinksService().getInitialLink().then(_handleUri);
+
+    // subsequent links while app is alive
+    // _linkStream.listen(_handleUri);
+    AppLinksService().initDeepLinks(onLink: (uri){
+      _handleUri(uri);
+    });
+  }
+
+  @override
+  void dispose() {
+    AppLinksService().dispose();
+    super.dispose();
+  }
+
+  void _handleUri(Uri? uri) {
+    if (uri == null) return;
+    log('🔗  $uri');
+    // Example navigation:
+    // Navigator.of(context).pushNamed('/book/${uri.pathSegments.last}');
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
