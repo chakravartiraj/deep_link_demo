@@ -9,3 +9,6 @@ create a beautiful one page landing page in flutter web, with mesmerizing animat
 replace withOpacity with withValues(alpha:) usage
 
 make sure that the landing page is optimally displayed for tablet web, tab web, mobile web, desktop web
+
+stage everything done uptil now.
+commit the staged changes with a comprehensive commit message.
