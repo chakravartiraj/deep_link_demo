@@ -107,7 +107,7 @@ class _LandingPageState extends State<LandingPage>
                   _buildHeroSection(),
                   _buildFeaturesSection(),
                   _buildTutorialSection(),
-                  _buildDemoSection(),
+                  // _buildDemoSection(),
                   _buildFooterSection(),
                 ],
               ),
