@@ -605,56 +605,6 @@ class _LandingPageState extends State<LandingPage>
     );
   }
 
-  Widget _buildDemoSection() {
-    return Container(
-      padding: EdgeInsets.all(_getResponsiveValue(context, 30.0, 50.0, 60.0)),
-      child: Column(
-        children: [
-          Text(
-            'Try Deep Links',
-            style: GoogleFonts.poppins(
-              fontSize: _getResponsiveValue(context, 32.0, 40.0, 48.0),
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: _getResponsiveValue(context, 30.0, 40.0, 50.0)),
-          Wrap(
-            spacing: _getResponsiveValue(context, 15.0, 18.0, 20.0),
-            runSpacing: _getResponsiveValue(context, 15.0, 18.0, 20.0),
-            children: [
-              _buildDemoButton('Home', '/home', Icons.home),
-              _buildDemoButton('Details', '/details/123', Icons.info),
-              _buildDemoButton('Profile', '/profile', Icons.person),
-              _buildDemoButton(
-                'Deep Link',
-                '/deeplink?source=web&data=demo',
-                Icons.link,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDemoButton(String label, String route, IconData icon) {
-    return ElevatedButton.icon(
-      onPressed: () => context.go(route),
-      icon: Icon(icon),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white.withValues(alpha: 0.2),
-        foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(
-          horizontal: _getResponsiveValue(context, 20.0, 22.0, 25.0),
-          vertical: _getResponsiveValue(context, 12.0, 13.0, 15.0),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-      ),
-    );
-  }
-
   Widget _buildFooterSection() {
     return Container(
       padding: EdgeInsets.all(_getResponsiveValue(context, 30.0, 35.0, 40.0)),
