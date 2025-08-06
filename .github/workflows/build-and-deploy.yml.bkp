@@ -1,0 +1,254 @@
+name: 🚀 Build and Deploy Flutter APK & Web
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      build_version:
+        description: 'Build version (e.g., 1.0.0)'
+        required: false
+        default: '1.0.0'
+      build_number:
+        description: 'Build number'
+        required: false
+        default: '1'
+
+env:
+  FLUTTER_VERSION: '3.24.1'
+  JAVA_VERSION: '17'
+
+jobs:
+  # ================== BUILD APK ==================
+  build-apk:
+    name: 📱 Build Android APK
+    runs-on: ubuntu-latest
+    
+    outputs:
+      apk-path: ${{ steps.build.outputs.apk-path }}
+      version: ${{ steps.version.outputs.version }}
+      build-number: ${{ steps.version.outputs.build-number }}
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: ☕ Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.JAVA_VERSION }}
+        
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: 'stable'
+        cache: true
+        
+    - name: 📋 Flutter Doctor
+      run: flutter doctor -v
+      
+    - name: 📦 Get Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Set Version Info
+      id: version
+      run: |
+        if [ "${{ github.event.inputs.build_version }}" != "" ]; then
+          VERSION="${{ github.event.inputs.build_version }}"
+          BUILD_NUMBER="${{ github.event.inputs.build_number }}"
+        else
+          VERSION=$(grep "version:" pubspec.yaml | cut -d ' ' -f 2 | cut -d '+' -f 1)
+          BUILD_NUMBER=$(grep "version:" pubspec.yaml | cut -d '+' -f 2)
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "build-number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+        echo "📱 Building version: $VERSION+$BUILD_NUMBER"
+        
+    - name: 🏗️ Build APK (Debug)
+      id: build
+      run: |
+        flutter build apk --debug \
+          --build-name=${{ steps.version.outputs.version }} \
+          --build-number=${{ steps.version.outputs.build-number }}
+        
+        # Create meaningful filename
+        APK_NAME="deep-link-demo-v${{ steps.version.outputs.version }}-build${{ steps.version.outputs.build-number }}-debug.apk"
+        mv build/app/outputs/flutter-apk/app-debug.apk "build/app/outputs/flutter-apk/$APK_NAME"
+        echo "apk-path=build/app/outputs/flutter-apk/$APK_NAME" >> $GITHUB_OUTPUT
+        echo "📱 APK built: $APK_NAME"
+        
+    - name: 📊 APK Info
+      run: |
+        APK_PATH="${{ steps.build.outputs.apk-path }}"
+        APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
+        echo "📱 APK Size: $APK_SIZE"
+        echo "📍 APK Path: $APK_PATH"
+        
+    - name: 📤 Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-apk
+        path: ${{ steps.build.outputs.apk-path }}
+        retention-days: 30
+
+  # ================== BUILD WEB ==================
+  build-web:
+    name: 🌐 Build Flutter Web
+    runs-on: ubuntu-latest
+    needs: build-apk
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Get Dependencies
+      run: flutter pub get
+      
+    - name: 🌐 Build Web
+      run: |
+        flutter build web --release \
+          --build-name=${{ needs.build-apk.outputs.version }} \
+          --build-number=${{ needs.build-apk.outputs.build-number }} \
+          --web-renderer html
+          
+    - name: 📁 Download APK Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: android-apk
+        path: ./apk-downloads/
+        
+    - name: 📱 Prepare Downloads Directory
+      run: |
+        mkdir -p build/web/downloads
+        cp -r apk-downloads/* build/web/downloads/
+        
+        # Create download info JSON
+        cat > build/web/downloads/info.json << EOF
+        {
+          "version": "${{ needs.build-apk.outputs.version }}",
+          "buildNumber": "${{ needs.build-apk.outputs.build-number }}",
+          "buildDate": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+          "platforms": {
+            "android": {
+              "available": true,
+              "filename": "$(ls apk-downloads/)",
+              "size": "$(du -h apk-downloads/* | cut -f1)"
+            },
+            "ios": {
+              "available": false,
+              "message": "iOS build coming soon!"
+            }
+          }
+        }
+        EOF
+        
+        echo "📋 Download info created:"
+        cat build/web/downloads/info.json
+        
+    - name: 📤 Upload Web Build
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-build
+        path: build/web/
+        retention-days: 30
+
+  # ================== DEPLOY TO GITHUB PAGES ==================
+  deploy-github-pages:
+    name: 🚀 Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build-apk, build-web]
+    if: github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+    - name: 📥 Download Web Build
+      uses: actions/download-artifact@v4
+      with:
+        name: web-build
+        path: ./web-build
+        
+    - name: 🔧 Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: 📤 Upload to Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./web-build
+        
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      
+    - name: 📋 Deployment Summary
+      run: |
+        echo "## 🚀 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+        echo "- **Web App**: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **APK Download**: ${{ steps.deployment.outputs.page_url }}downloads/" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version**: ${{ needs.build-apk.outputs.version }}+${{ needs.build-apk.outputs.build-number }}" >> $GITHUB_STEP_SUMMARY
+
+  # ================== CREATE RELEASE (Optional) ==================
+  create-release:
+    name: 📦 Create Release
+    runs-on: ubuntu-latest
+    needs: [build-apk, build-web, deploy-github-pages]
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 📁 Download APK
+      uses: actions/download-artifact@v4
+      with:
+        name: android-apk
+        path: ./release-assets/
+        
+    - name: 📦 Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./release-assets/*
+        tag_name: ${{ github.ref_name }}
+        name: Deep Link Demo v${{ needs.build-apk.outputs.version }}
+        body: |
+          ## 🚀 Deep Link Demo v${{ needs.build-apk.outputs.version }}
+          
+          ### 📱 Downloads
+          - **Android APK**: Available in assets below
+          - **Web App**: [Live Demo](https://your-username.github.io/deep_link_demo)
+          
+          ### ✨ Features
+          - Deep linking support for iOS and Android
+          - PWA with offline capabilities
+          - Responsive design for all devices
+          - GitHub Pages hosted
+          
+          ### 🔧 Installation
+          1. Download the APK for Android
+          2. Enable "Install from unknown sources"
+          3. Install and test deep linking functionality
+          
+          Built with Flutter ${{ env.FLUTTER_VERSION }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
