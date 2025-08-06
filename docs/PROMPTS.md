@@ -14,3 +14,5 @@ stage everything done uptil now.
 commit the staged changes with a comprehensive commit message.
 
 keep the scope of the load speed & time optimization limited to web/ directory
+
+host the apple-app-site-association and assetlinks.json files with the Landing Page on GitHub Pages for deep linking verification.

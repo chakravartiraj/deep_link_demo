@@ -62,6 +62,18 @@
     ],
     "screenshots": [],
     "prefer_related_applications": false,
+    "related_applications": [
+        {
+            "platform": "play",
+            "id": "com.example.myapp"
+        }
+    ],
+    "protocol_handlers": [
+        {
+            "protocol": "web+myapp",
+            "url": "/?action=%s"
+        }
+    ],
     "edge_side_panel": {
         "preferred_width": 412
     },

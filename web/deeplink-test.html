@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Link Test Page - Deep Link Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section h2 {
+            color: #fff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .test-link {
+            display: block;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .verification-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .verification-link {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        .verification-link:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #fff;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .container { padding: 20px; }
+            h1 { font-size: 2em; }
+            .link-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Deep Link Testing Center</h1>
+        
+        <div class="status">
+            <strong>✅ Deep Linking Setup Complete!</strong><br>
+            Your Flutter web app is now configured for deep linking with iOS and Android platforms.
+        </div>
+
+        <div class="section">
+            <h2>🧪 Test Deep Links</h2>
+            <p>Click these links to test deep linking functionality:</p>
+            <div class="link-grid">
+                <a href="/home" class="test-link">
+                    <strong>Home Page</strong><br>
+                    <small>Navigate to home screen</small>
+                </a>
+                <a href="/profile" class="test-link">
+                    <strong>Profile Page</strong><br>
+                    <small>View user profile</small>
+                </a>
+                <a href="/details/123" class="test-link">
+                    <strong>Details Page</strong><br>
+                    <small>Item details with ID: 123</small>
+                </a>
+                <a href="/report" class="test-link">
+                    <strong>Report Page</strong><br>
+                    <small>View reports and analytics</small>
+                </a>
+                <a href="/deeplink?source=web&data=test&user=demo" class="test-link">
+                    <strong>Custom Deep Link</strong><br>
+                    <small>Deep link with parameters</small>
+                </a>
+                <a href="/details/456?ref=test&category=sample" class="test-link">
+                    <strong>Complex Deep Link</strong><br>
+                    <small>Details with query parameters</small>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Verification Files</h2>
+            <p>These files enable platform verification for deep linking:</p>
+            <div class="verification-links">
+                <a href="/.well-known/apple-app-site-association" class="verification-link" target="_blank">
+                    📱 Apple Association File
+                </a>
+                <a href="/.well-known/assetlinks.json" class="verification-link" target="_blank">
+                    🤖 Android Asset Links
+                </a>
+                <a href="/.well-known/README.md" class="verification-link" target="_blank">
+                    📖 Setup Instructions
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Platform Instructions</h2>
+            
+            <div class="info">
+                <strong>📱 iOS Testing:</strong><br>
+                1. Deploy this site to GitHub Pages or your domain<br>
+                2. Configure Apple Team ID in apple-app-site-association<br>
+                3. Add associated domains in your iOS app<br>
+                4. Test with Safari on iOS device or simulator
+            </div>
+
+            <div class="info">
+                <strong>🤖 Android Testing:</strong><br>
+                1. Get your app's SHA-256 fingerprint<br>
+                2. Update assetlinks.json with your certificate<br>
+                3. Add intent filters in AndroidManifest.xml<br>
+                4. Test with Chrome on Android device or emulator
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Next Steps</h2>
+            <div class="info">
+                <strong>For Production:</strong><br>
+                • Deploy to your custom domain or GitHub Pages<br>
+                • Update team IDs and SHA-256 fingerprints<br>
+                • Test thoroughly on real devices<br>
+                • Submit apps to stores with proper configuration<br>
+                • Monitor deep link analytics and user flow
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+            <small>Built with Flutter • Optimized for Performance • Ready for Production</small>
+        </div>
+    </div>
+
+    <script>
+        // Log current URL for debugging
+        console.log('Current URL:', window.location.href);
+        console.log('Path:', window.location.pathname);
+        console.log('Search params:', window.location.search);
+        
+        // Show URL info in console for testing
+        if (window.location.pathname !== '/' || window.location.search) {
+            console.log('🔗 Deep link detected!');
+            console.log('Route:', window.location.pathname);
+            if (window.location.search) {
+                console.log('Parameters:', new URLSearchParams(window.location.search));
+            }
+        }
+    </script>
+</body>
+</html>
