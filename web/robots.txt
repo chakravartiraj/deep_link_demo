@@ -3,9 +3,14 @@ User-agent: *
 Allow: /
 
 # Allow crawling of main pages
-Allow: /home
-Allow: /profile
-Allow: /deeplink
+#Allow: /home
+#Allow: /profile
+#Allow: /deeplink
+
+# Disallow crawling of following pages
+Disallow: /home
+Disallow: /profile
+Disallow: /deeplink
 
 # Sitemap location
 Sitemap: https://your-domain.com/sitemap.xml
