@@ -1,0 +1,17 @@
+# Flutter configuration
+# This file is used to configure Flutter CLI settings
+
+# Disable analytics to prevent keyring usage
+analytics-enabled=false
+
+# Disable crash reporting
+crash-reporting-enabled=false
+
+# Use plain text for storage instead of keyring
+use-keyring=false
+
+# Platform support settings
+enable-android=true
+enable-ios=true
+enable-web=true
+enable-windows-desktop=true

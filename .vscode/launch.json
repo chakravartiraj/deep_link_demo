@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter (Debug)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "env": {
+                "FLUTTER_SECURE_STORAGE_USE_PLAINTEXT": "true"
+            }
+        },
+        {
+            "name": "Flutter (Release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "env": {
+                "FLUTTER_SECURE_STORAGE_USE_PLAINTEXT": "true"
+            }
+        }
+    ]
+}

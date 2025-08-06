@@ -1,0 +1,11 @@
+# Dart Analysis Server Options
+# This file contains options for the Dart Analysis Server
+
+# Disable analytics
+enable-analytics: false
+
+# Disable crash reporting  
+enable-crash-reporting: false
+
+# Use plain text storage instead of secure storage
+use-secure-storage: false

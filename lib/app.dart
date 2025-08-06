@@ -8,23 +8,16 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     // Watch the themeNotifier to rebuild when the theme mode changes
     final themeMode = ref.watch(themeProvider.notifier).materialThemeMode;
 
-    return ProviderScope(
-      child: Builder( // Added Builder to access context within ProviderScope
-        builder: (context) {
-          return MaterialApp.router(
-            routerConfig: appRouter,
-            title: 'Deep-Link Navigation App', // Consider moving title to a const
-            theme: AppTheme.lightTheme, // Use light theme from AppTheme
-            darkTheme: AppTheme.darkTheme, // Use dark theme from AppTheme
-            themeMode: themeMode, // Use themeMode from ThemeProvider
-            debugShowCheckedModeBanner: false,
-          );
-        },
-      ),
+    return MaterialApp.router(
+      routerConfig: appRouter,
+      title: 'Deep-Link Navigation App', // Consider moving title to a const
+      theme: AppTheme.lightTheme, // Use light theme from AppTheme
+      darkTheme: AppTheme.darkTheme, // Use dark theme from AppTheme
+      themeMode: themeMode, // Use themeMode from ThemeProvider
+      debugShowCheckedModeBanner: false,
     );
   }
 }

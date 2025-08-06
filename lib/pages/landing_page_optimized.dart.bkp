@@ -1,0 +1,415 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class LandingPageOptimized extends StatefulWidget {
+  const LandingPageOptimized({super.key});
+
+  @override
+  State<LandingPageOptimized> createState() => _LandingPageOptimizedState();
+}
+
+class _LandingPageOptimizedState extends State<LandingPageOptimized>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  // Optimized single animation controller
+  late AnimationController _mainController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize optimized animations
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _mainController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
+    );
+
+    _slideAnimation = Tween<double>(begin: 50.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _mainController,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _mainController,
+        curve: const Interval(0.2, 0.8, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    // Start animations with delay for better performance
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        _fadeController.forward();
+        _mainController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _mainController.dispose();
+    super.dispose();
+  }
+
+  // Optimized responsive value calculation
+  double _getResponsiveValue({
+    required double mobile,
+    required double tablet,
+    required double desktop,
+  }) {
+    final width = MediaQuery.of(context).size.width;
+    if (width <= 768) return mobile;
+    if (width <= 1024) return tablet;
+    return desktop;
+  }
+
+  // Optimized padding calculation
+  EdgeInsetsGeometry _getResponsivePadding() {
+    final width = MediaQuery.of(context).size.width;
+    if (width <= 768) {
+      return const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0);
+    } else if (width <= 1024) {
+      return const EdgeInsets.symmetric(horizontal: 32.0, vertical: 40.0);
+    }
+    return const EdgeInsets.symmetric(horizontal: 64.0, vertical: 60.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width <= 768;
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+          ),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: AnimatedBuilder(
+              animation: _mainController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _slideAnimation.value),
+                  child: Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: _buildContent(context, isMobile),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, bool isMobile) {
+    return SingleChildScrollView(
+      padding: _getResponsivePadding(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Optimized header section
+          _buildHeader(isMobile),
+
+          SizedBox(
+            height: _getResponsiveValue(mobile: 40, tablet: 60, desktop: 80),
+          ),
+
+          // Feature cards with optimized layout
+          _buildFeatureCards(isMobile),
+
+          SizedBox(
+            height: _getResponsiveValue(mobile: 40, tablet: 60, desktop: 80),
+          ),
+
+          // Call to action buttons
+          _buildActionButtons(isMobile),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(bool isMobile) {
+    return Column(
+      children: [
+        // App icon with optimized shadow
+        Container(
+          width: _getResponsiveValue(mobile: 80, tablet: 100, desktop: 120),
+          height: _getResponsiveValue(mobile: 80, tablet: 100, desktop: 120),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.link,
+            size: _getResponsiveValue(mobile: 40, tablet: 50, desktop: 60),
+            color: Colors.white,
+          ),
+        ),
+
+        SizedBox(
+          height: _getResponsiveValue(mobile: 20, tablet: 30, desktop: 40),
+        ),
+
+        // Title with optimized typography
+        Text(
+          'Deep Link Demo',
+          style: GoogleFonts.poppins(
+            fontSize: _getResponsiveValue(mobile: 32, tablet: 40, desktop: 48),
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            height: 1.2,
+          ),
+          textAlign: TextAlign.center,
+        ),
+
+        SizedBox(
+          height: _getResponsiveValue(mobile: 12, tablet: 16, desktop: 20),
+        ),
+
+        // Subtitle
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: _getResponsiveValue(mobile: 0, tablet: 40, desktop: 80),
+          ),
+          child: Text(
+            'Experience seamless navigation with deep linking capabilities',
+            style: GoogleFonts.inter(
+              fontSize: _getResponsiveValue(
+                mobile: 16,
+                tablet: 18,
+                desktop: 20,
+              ),
+              color: Colors.white.withValues(alpha: 0.9),
+              height: 1.4,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureCards(bool isMobile) {
+    final features = [
+      {
+        'icon': Icons.navigation,
+        'title': 'Smart Navigation',
+        'description': 'Intelligent routing system',
+      },
+      {
+        'icon': Icons.speed,
+        'title': 'Fast Performance',
+        'description': 'Optimized for speed',
+      },
+      {
+        'icon': Icons.mobile_friendly,
+        'title': 'Cross Platform',
+        'description': 'Works everywhere',
+      },
+    ];
+
+    if (isMobile) {
+      return Column(
+        children: features
+            .map(
+              (feature) => Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: _buildFeatureCard(feature),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    return Wrap(
+      spacing: 20,
+      runSpacing: 20,
+      alignment: WrapAlignment.center,
+      children: features
+          .map(
+            (feature) => SizedBox(
+              width: _getResponsiveValue(
+                mobile: double.infinity,
+                tablet: 280,
+                desktop: 320,
+              ),
+              child: _buildFeatureCard(feature),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildFeatureCard(Map<String, dynamic> feature) {
+    return Container(
+      padding: EdgeInsets.all(
+        _getResponsiveValue(mobile: 20, tablet: 24, desktop: 28),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            feature['icon'] as IconData,
+            size: _getResponsiveValue(mobile: 32, tablet: 36, desktop: 40),
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: _getResponsiveValue(mobile: 12, tablet: 16, desktop: 20),
+          ),
+          Text(
+            feature['title'] as String,
+            style: GoogleFonts.poppins(
+              fontSize: _getResponsiveValue(
+                mobile: 18,
+                tablet: 20,
+                desktop: 22,
+              ),
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            feature['description'] as String,
+            style: GoogleFonts.inter(
+              fontSize: _getResponsiveValue(
+                mobile: 14,
+                tablet: 15,
+                desktop: 16,
+              ),
+              color: Colors.white.withValues(alpha: 0.8),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(bool isMobile) {
+    if (isMobile) {
+      return Column(
+        children: [
+          _buildPrimaryButton(),
+          const SizedBox(height: 16),
+          _buildSecondaryButton(),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildPrimaryButton(),
+        const SizedBox(width: 20),
+        _buildSecondaryButton(),
+      ],
+    );
+  }
+
+  Widget _buildPrimaryButton() {
+    return SizedBox(
+      width: _getResponsiveValue(
+        mobile: double.infinity,
+        tablet: 200,
+        desktop: 220,
+      ),
+      height: _getResponsiveValue(mobile: 50, tablet: 54, desktop: 58),
+      child: ElevatedButton(
+        onPressed: () {
+          HapticFeedback.lightImpact();
+          context.go('/home');
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: const Color(0xFF667eea),
+          elevation: 8,
+          shadowColor: Colors.black.withValues(alpha: 0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(
+          'Get Started',
+          style: GoogleFonts.poppins(
+            fontSize: _getResponsiveValue(mobile: 16, tablet: 17, desktop: 18),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSecondaryButton() {
+    return SizedBox(
+      width: _getResponsiveValue(
+        mobile: double.infinity,
+        tablet: 200,
+        desktop: 220,
+      ),
+      height: _getResponsiveValue(mobile: 50, tablet: 54, desktop: 58),
+      child: OutlinedButton(
+        onPressed: () {
+          HapticFeedback.lightImpact();
+          context.go('/profile');
+        },
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white,
+          side: const BorderSide(color: Colors.white, width: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(
+          'Learn More',
+          style: GoogleFonts.poppins(
+            fontSize: _getResponsiveValue(mobile: 16, tablet: 17, desktop: 18),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}

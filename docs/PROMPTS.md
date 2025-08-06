@@ -1,0 +1,11 @@
+summarize the project so that you are aware of what's done so far in this project
+
+put this summary as PROJECT_SUMMARY.md in doc/ directory
+
+create a comprehensive documentation in .md files on what we just did
+
+create a beautiful one page landing page in flutter web, with mesmerizing animations and ui components showcasing deep-linking setup & integration tutorial
+
+replace withOpacity with withValues(alpha:) usage
+
+make sure that the landing page is optimally displayed for tablet web, tab web, mobile web, desktop web

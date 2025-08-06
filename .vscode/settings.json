@@ -1,3 +1,22 @@
 {
-  "IDX.agenticWorkspace": true
+  "IDX.agenticWorkspace": true,
+  "dart.flutterSdkPath": null,
+  "dart.enableSdkFormatter": true,
+  "dart.warnWhenEditingFilesOutsideWorkspace": false,
+  "dart.allowAnalytics": false,
+  "dart.promptToGetPackages": false,
+  "dart.previewFlutterUiGuides": true,
+  "dart.flutterHotReloadOnSave": "manual",
+  "dart.analysisServerFolding": false,
+  "dart.insertArgumentPlaceholders": false,
+  "dart.reportAnalyzerErrors": false,
+  "dart.sendAnalytics": false,
+  "dart.additionalAnalyzerFileExtensions": [],
+  "terminal.integrated.env.windows": {
+    "FLUTTER_SECURE_STORAGE_USE_PLAINTEXT": "true",
+    "DART_ANALYTICS_DISABLED": "true",
+    "FLUTTER_ANALYTICS_DISABLED": "true",
+    "NO_ANALYTICS": "1",
+    "DART_DISABLE_ANALYTICS": "1"
+  }
 }
