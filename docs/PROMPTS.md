@@ -12,3 +12,5 @@ make sure that the landing page is optimally displayed for tablet web, tab web, 
 
 stage everything done uptil now.
 commit the staged changes with a comprehensive commit message.
+
+keep the scope of the load speed & time optimization limited to web/ directory

@@ -1,0 +1,20 @@
+# Deep Link Demo - Optimized for Search Engines
+User-agent: *
+Allow: /
+
+# Allow crawling of main pages
+Allow: /home
+Allow: /profile
+Allow: /deeplink
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Optimize for performance
+# Block unnecessary paths
+Disallow: /flutter_service_worker.js
+Disallow: /canvaskit/
+Disallow: /assets/packages/
