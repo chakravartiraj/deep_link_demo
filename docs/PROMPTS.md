@@ -11,6 +11,7 @@ replace withOpacity with withValues(alpha:) usage
 make sure that the landing page is optimally displayed for tablet web, tab web, mobile web, desktop web
 
 stage everything done uptil now.
+stage all changes including new files and modifications
 commit the staged changes with a comprehensive commit message.
 
 keep the scope of the load speed & time optimization limited to web/ directory
