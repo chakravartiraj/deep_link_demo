@@ -67,7 +67,28 @@ For a complete project summary, architecture overview, and current status, see:
 
 ---
 
-## 🗺️ **Documentation Structure**
+## � **Quick Start with Fastlane**
+
+We now have professional-grade automation with Fastlane! 
+
+### **Essential Commands:**
+```bash
+# From android/ directory
+bundle exec fastlane android clean          # Clean project
+bundle exec fastlane android build_debug    # Build debug APK  
+bundle exec fastlane android build_release  # Build release APK (auto-creates keystore)
+bundle exec fastlane android deploy_web     # Build & prepare web deployment
+bundle exec fastlane android ci             # Full CI/CD pipeline
+```
+
+### **System Requirements:**
+- ✅ **JDK 17** - Installed and configured
+- ✅ **Ruby & Fastlane** - Ready for automation
+- ✅ **Flutter SDK** - For app development
+
+---
+
+## 📚 **Documentation Structure**
 
 ```
 docs/

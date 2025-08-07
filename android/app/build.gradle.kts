@@ -21,12 +21,12 @@ android {
     ndkVersion = "27.0.12077973"
     
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     // Signing configurations
@@ -71,4 +71,15 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // UI Testing dependencies for screenshots
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
+    
+    // Fastlane Screengrab for automated screenshots
+    androidTestImplementation("tools.fastlane:screengrab:2.1.1")
 }

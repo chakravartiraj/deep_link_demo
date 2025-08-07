@@ -1,0 +1,271 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# Flutter Deep Link Demo - Fastlane Configuration
+# This Fastfile is optimized for Flutter development workflow
+
+default_platform(:android)
+
+# Global variables
+FLUTTER_ROOT = "../"
+KEYSTORE_PATH = "./keystores/release.jks"
+KEYSTORE_ALIAS = "release"
+KEYSTORE_PASSWORD = "321123"
+
+before_all do
+  # Ensure we're in the right directory
+  sh("cd #{FLUTTER_ROOT}")
+end
+
+platform :android do
+  desc "🧹 Clean Flutter project and reset dependencies"
+  lane :clean do
+    # Clean Flutter project
+    sh("cd #{FLUTTER_ROOT} && flutter clean")
+    sh("cd #{FLUTTER_ROOT} && flutter pub get")
+    
+    # Clean Android project
+    gradle(task: "clean")
+    
+    UI.success("✅ Project cleaned successfully!")
+  end
+
+  desc "🔍 Run Flutter code analysis"
+  lane :analyze do
+    sh("cd #{FLUTTER_ROOT} && flutter analyze --no-fatal-infos")
+    UI.success("✅ Code analysis completed!")
+  end
+
+  desc "🧪 Run Flutter tests with coverage"
+  lane :test do
+    sh("cd #{FLUTTER_ROOT} && flutter test --coverage")
+    UI.success("✅ Tests completed with coverage!")
+  end
+
+  desc "🔨 Build debug APK"
+  lane :build_debug do
+    sh("cd #{FLUTTER_ROOT} && flutter build apk --debug")
+    
+    apk_path = "#{FLUTTER_ROOT}build/app/outputs/flutter-apk/app-debug.apk"
+    if File.exist?(apk_path)
+      size_mb = File.size(apk_path) / 1024.0 / 1024.0
+      UI.success("✅ Debug APK built successfully: #{size_mb.round(2)} MB")
+      UI.message("📱 APK location: #{apk_path}")
+    end
+  end
+
+  desc "🚀 Build release APK with automatic keystore generation"
+  lane :build_release do
+    # Ensure keystore exists
+    ensure_keystore_exists
+    
+    # Build release APK
+    sh("cd #{FLUTTER_ROOT} && flutter build apk --release")
+    
+    apk_path = "#{FLUTTER_ROOT}build/app/outputs/flutter-apk/app-release.apk"
+    if File.exist?(apk_path)
+      size_mb = File.size(apk_path) / 1024.0 / 1024.0
+      UI.success("✅ Release APK built successfully: #{size_mb.round(2)} MB")
+      UI.message("📱 APK location: #{apk_path}")
+    end
+  end
+
+  desc "📦 Build and sign release APK using Gradle"
+  lane :build_gradle_release do
+    # Ensure keystore exists
+    ensure_keystore_exists
+    
+    # Build using Gradle
+    gradle(
+      task: "clean assembleRelease",
+      properties: {
+        "android.injected.signing.store.file" => KEYSTORE_PATH,
+        "android.injected.signing.store.password" => KEYSTORE_PASSWORD,
+        "android.injected.signing.key.alias" => KEYSTORE_ALIAS,
+        "android.injected.signing.key.password" => KEYSTORE_PASSWORD,
+      }
+    )
+    
+    UI.success("✅ Release APK built and signed using Gradle!")
+  end
+
+  desc "🌐 Build optimized web release"
+  lane :build_web do
+    sh("cd #{FLUTTER_ROOT} && flutter build web --release")
+    
+    web_dir = "#{FLUTTER_ROOT}build/web"
+    if Dir.exist?(web_dir)
+      # Calculate total size
+      total_size = Dir.glob("#{web_dir}/**/*").select { |f| File.file?(f) }
+                      .sum { |f| File.size(f) }
+      size_mb = total_size / 1024.0 / 1024.0
+      UI.success("✅ Web build completed: #{size_mb.round(2)} MB")
+      UI.message("🌐 Web files location: #{web_dir}")
+    end
+  end
+
+  desc "🚀 Prepare web deployment with deep linking files"
+  lane :deploy_web do
+    # Build web first
+    build_web
+    
+    # Copy deep linking verification files
+    web_well_known = "#{FLUTTER_ROOT}build/web/.well-known"
+    sh("mkdir -p #{web_well_known}")
+    
+    # Copy assetlinks.json
+    assetlinks_source = "#{FLUTTER_ROOT}docs/05-deep-linking/platform-guides/android/assetlinks.json"
+    if File.exist?(assetlinks_source)
+      sh("cp #{assetlinks_source} #{web_well_known}/assetlinks.json")
+      UI.success("✅ Copied assetlinks.json")
+    end
+    
+    # Copy apple-app-site-association
+    apple_source = "#{FLUTTER_ROOT}docs/05-deep-linking/platform-guides/ios/apple-app-site-association"
+    if File.exist?(apple_source)
+      sh("cp #{apple_source} #{web_well_known}/apple-app-site-association")
+      UI.success("✅ Copied apple-app-site-association")
+    end
+    
+    UI.success("🚀 Web deployment files ready!")
+    UI.message("📁 Deploy the contents of: #{FLUTTER_ROOT}build/web/")
+  end
+
+  desc "🏗️ Complete CI/CD pipeline - test, analyze, and build"
+  lane :ci do
+    clean
+    analyze
+    test
+    build_release
+    UI.success("🎉 CI/CD pipeline completed successfully!")
+  end
+
+  desc "📊 Generate project report"
+  lane :report do
+    UI.header("📊 Flutter Deep Link Demo - Project Report")
+    
+    # Flutter version
+    flutter_version = sh("cd #{FLUTTER_ROOT} && flutter --version --machine", log: false)
+    UI.message("Flutter: #{JSON.parse(flutter_version)['frameworkVersion']}")
+    
+    # Project info
+    UI.message("Project: Deep Link Demo")
+    UI.message("Platform: Android + Web")
+    UI.message("Architecture: Feature-based with centralized constants")
+    
+    # Build info
+    if File.exist?("#{FLUTTER_ROOT}build/app/outputs/flutter-apk/app-release.apk")
+      size = File.size("#{FLUTTER_ROOT}build/app/outputs/flutter-apk/app-release.apk") / 1024.0 / 1024.0
+      UI.message("Latest Release APK: #{size.round(2)} MB")
+    end
+    
+    UI.success("📊 Report generated!")
+  end
+
+  # Private helper methods
+  private_lane :ensure_keystore_exists do
+    keystore_dir = "./keystores"
+    
+    unless File.exist?(KEYSTORE_PATH)
+      UI.message("🔑 Creating release keystore...")
+      
+      # Create keystores directory
+      sh("mkdir -p #{keystore_dir}")
+      
+      # Generate keystore
+      sh("keytool -genkey -v " \
+         "-keystore #{KEYSTORE_PATH} " \
+         "-alias #{KEYSTORE_ALIAS} " \
+         "-keyalg RSA " \
+         "-keysize 2048 " \
+         "-validity 25550 " \
+         "-storepass #{KEYSTORE_PASSWORD} " \
+         "-keypass #{KEYSTORE_PASSWORD} " \
+         "-dname 'CN=John Doe,OU=Development,O=Shell Company,L=Bengaluru,ST=Karnataka,C=India'")
+      
+      UI.success("✅ Release keystore created successfully!")
+    else
+      UI.message("🔑 Using existing keystore: #{KEYSTORE_PATH}")
+    end
+  end
+
+  # Auto-generated Fastlane lanes for Android
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+  desc "Build debug and test APK for screenshots"
+  lane :build_for_screengrab do
+    gradle(
+      task: 'clean'
+    )
+    gradle(
+      task: 'assembleDebug'
+    )
+    gradle(
+      task: 'assembleAndroidTest'
+    )
+  end
+
+  desc "Build debug APK using Gradle"
+  lane :build_debug_gradle do
+    gradle(task: "assembleDebug")
+  end
+
+  desc "Build release APK"
+  lane :release do
+    gradle(task: "assembleRelease")
+  end
+
+  desc "Take screenshots with proper APK paths"
+  lane :screenshots do
+    build_for_screengrab
+    
+    # Define APK paths
+    app_apk_path = "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+    tests_apk_path = "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}".gsub('app-debug.apk', 'app-debug-androidTest.apk')
+    
+    UI.message("📱 App APK: #{app_apk_path}")
+    UI.message("🧪 Test APK: #{tests_apk_path}")
+    
+    # Check if APKs exist
+    if File.exist?(app_apk_path) && File.exist?(tests_apk_path)
+      screengrab(
+        app_apk_path: app_apk_path,
+        tests_apk_path: tests_apk_path,
+        locales: ["en-US"],
+        output_directory: "./fastlane/metadata/android"
+      )
+      UI.success("📸 Screenshots generated successfully!")
+    else
+      UI.error("❌ APK files not found. Please ensure both app and test APKs are built.")
+      UI.message("📝 To use screenshots, you need to:")
+      UI.message("   1. Create UI tests in android/app/src/androidTest/")
+      UI.message("   2. Add screenshot capture code in your tests")
+      UI.message("   3. Run 'fastlane android screenshots' again")
+    end
+  end
+end

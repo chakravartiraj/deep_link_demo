@@ -45,8 +45,8 @@ app.*.map.json
 /android/app/release
 
 # Android Keystore - SECURITY: Never commit keystore files or passwords
-*.jks
-*.keystore
-key.properties
+# *.jks
+# *.keystore
+# key.properties
 # However, we want to keep the template key.properties for reference
 !android/key.properties
