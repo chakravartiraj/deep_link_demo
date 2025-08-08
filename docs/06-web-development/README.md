@@ -26,6 +26,14 @@ Comprehensive web performance and optimization:
 - Web-specific Flutter configurations
 - Performance monitoring and analysis
 
+### **[PWA Optimization](./PWA_OPTIMIZATION.md)**
+Progressive Web App features and performance:
+- Service worker implementation
+- Offline functionality
+- App-like experience optimization
+- PWA manifest configuration
+- Installation and caching strategies
+
 ### **[Landing Page Documentation](./landing-page/)**
 Complete landing page implementation and features:
 

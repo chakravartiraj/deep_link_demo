@@ -24,6 +24,20 @@ Main Android app signing configuration:
 - Security best practices
 - Build verification steps
 
+### **[Certificate Management](./CERTIFICATE_MANAGEMENT.md)**
+Complete certificate management procedures:
+- SHA256 fingerprint extraction
+- Certificate verification for Android App Links
+- Keystore security and backup procedures
+- Certificate debugging and troubleshooting
+
+### **[APK Testing Guide](./APK_TESTING.md)**
+Release APK testing and validation:
+- Installation testing procedures
+- Deep linking verification
+- Certificate validation
+- Performance testing guidelines
+
 ### **Platform-Specific Keystore Generation**
 
 #### **[Windows Keystore Generation](./KEYSTORE_GENERATION_WINDOWS.md)**

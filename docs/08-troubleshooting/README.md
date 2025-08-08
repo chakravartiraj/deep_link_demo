@@ -16,6 +16,20 @@ This section provides comprehensive troubleshooting guides and solutions for com
 - PowerShell and batch launcher scripts
 - Environment variable troubleshooting
 
+### **[General Troubleshooting](./TROUBLESHOOTING.md)**
+**Common issues and solutions reference:**
+- GitHub Pages deployment issues
+- Certificate and keystore problems
+- APK build and signing errors
+- Deep linking verification issues
+- Performance and optimization troubleshooting
+
+### **[Keyring Fix](./KEYRING_FIX.md)**
+**Alternative keyring problem solutions:**
+- Additional keyring resolution methods
+- System-specific fixes
+- Alternative environment configurations
+
 ## 🎯 **Common Issue Categories**
 
 ### **🔧 Development Environment Issues**
