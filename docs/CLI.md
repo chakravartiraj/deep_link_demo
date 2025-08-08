@@ -34,3 +34,9 @@ git checkout gh-pages
 Remove-Item -Path * -Recurse -Force -Exclude .git build\
 # Copy the built web files to the root of gh-pages branch
 Copy-Item -Path "build\web\*" -Destination "." -Recurse
+# Check all the branches existing for the repository
+git branch -a
+# 
+git add .
+# 
+git commit -m "docs: enhance CLI.md with comprehensive command descriptions"
