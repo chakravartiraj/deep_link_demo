@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <title>Deep Link Demo - Fast PWA</title>
+  <meta name="description" content="Experience seamless navigation with deep linking capabilities. Optimized PWA for maximum performance.">
+  
+  <!-- PWA Optimized Meta Tags -->
+  <meta name="theme-color" content="#764ba2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Deep Link Demo">
+  <meta name="msapplication-TileColor" content="#667eea">
+  <meta name="application-name" content="Deep Link Demo">
+  
+  <!-- Performance Optimization -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="flutter_bootstrap.js" as="script">
+  <link rel="preload" href="main.dart.js" as="script">
+  
+  <!-- Preconnect to Google Fonts for faster loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Deep Linking Support -->
+  <meta property="al:ios:app_store_id" content="YOUR_APP_STORE_ID">
+  <meta property="al:ios:app_name" content="Deep Link Demo">
+  <meta property="al:android:package" content="com.example.myapp">
+  <meta property="al:android:app_name" content="Deep Link Demo">
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_STORE_ID, affiliate-data=YOUR_AFFILIATE_DATA, app-argument=YOUR_CURRENT_URL">
+  
+  <!-- Smart App Banner -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Favicons and Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png">
+  
+  <!-- Optimized CSS with critical above-the-fold styles -->
+  <style>
+    /* Critical CSS - inline for fastest loading */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+    }
+    
+    /* Enhanced loading screen with sophisticated animations */
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: 9999;
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    
+    .loading.fade-out {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+    
+    /* Advanced spinner with multiple rings */
+    .spinner-container {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    
+    .spinner {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      top: 10px;
+      left: 10px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top: 3px solid rgba(255,255,255,0.8);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      will-change: transform;
+    }
+    
+    .spinner-outer {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border: 2px solid rgba(255,255,255,0.05);
+      border-left: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: spin 2s linear infinite reverse;
+    }
+    
+    .spinner-inner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 20px;
+      left: 20px;
+      border: 2px solid rgba(255,255,255,0.05);
+      border-right: 2px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Loading text with typing animation */
+    .loading-text {
+      color: white;
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: 300;
+      opacity: 0.9;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.9; }
+      50% { opacity: 0.6; }
+    }
+    
+    /* Progress bar with smooth animation */
+    .progress-container {
+      width: 240px;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      margin-top: 25px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,1));
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+    
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    /* Floating particles animation */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: float 6s infinite ease-in-out;
+    }
+    
+    .particle:nth-child(1) { left: 10%; animation-delay: -0.5s; animation-duration: 8s; }
+    .particle:nth-child(2) { left: 20%; animation-delay: -1s; animation-duration: 6s; }
+    .particle:nth-child(3) { left: 30%; animation-delay: -1.5s; animation-duration: 7s; }
+    .particle:nth-child(4) { left: 40%; animation-delay: -2s; animation-duration: 9s; }
+    .particle:nth-child(5) { left: 50%; animation-delay: -2.5s; animation-duration: 5s; }
+    .particle:nth-child(6) { left: 60%; animation-delay: -3s; animation-duration: 8s; }
+    .particle:nth-child(7) { left: 70%; animation-delay: -3.5s; animation-duration: 6s; }
+    .particle:nth-child(8) { left: 80%; animation-delay: -4s; animation-duration: 7s; }
+    .particle:nth-child(9) { left: 90%; animation-delay: -4.5s; animation-duration: 9s; }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(90vh) scale(1);
+      }
+      90% {
+        opacity: 1;
+        transform: translateY(-10vh) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) scale(0);
+      }
+    }
+    
+    /* Status indicator */
+    .status-indicator {
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      margin-top: 15px;
+      min-height: 16px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Flutter app container */
+    #flutter-app {
+      opacity: 0;
+      transition: opacity 0.8s ease-in;
+    }
+    
+    #flutter-app.loaded {
+      opacity: 1;
+    }
+    
+    /* Floating download button */
+    .floating-download {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 10000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 15px 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .floating-download:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      background: white;
+    }
+    
+    .floating-download .icon {
+      font-size: 18px;
+    }
+    
+    @media (max-width: 768px) {
+      .floating-download {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        font-size: 13px;
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Prevent flash of unstyled content */
+    flt-glass-pane {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    flt-glass-pane.ready {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    
+    <div class="spinner-container">
+      <div class="spinner-outer"></div>
+      <div class="spinner"></div>
+      <div class="spinner-inner"></div>
+    </div>
+    
+    <div class="loading-text">Deep Link Demo</div>
+    
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div class="status-indicator" id="status">Initializing...</div>
+  </div>
+
+  <div id="flutter-app"></div>
+
+  <!-- Floating download button -->
+  <a href="/downloads.html" class="floating-download" id="download-btn" style="display: none;">
+    <span class="icon">📱</span>
+    <span>Download App</span>
+  </a>
+
+  <script>
+    // Enhanced loading manager with proper Flutter detection
+    class LoadingManager {
+      constructor() {
+        this.progress = 0;
+        this.statusMessages = [
+          'Initializing...',
+          'Loading Flutter engine...',
+          'Preparing widgets...',
+          'Almost ready...',
+          'Welcome!'
+        ];
+        this.currentStatus = 0;
+        this.isFlutterReady = false;
+        this.startTime = Date.now();
+        
+        this.progressBar = document.getElementById('progress-bar');
+        this.statusElement = document.getElementById('status');
+        this.loadingElement = document.getElementById('loading');
+        
+        this.init();
+      }
+      
+      init() {
+        // Start progress simulation
+        this.simulateProgress();
+        
+        // Listen for Flutter events
+        this.setupFlutterListeners();
+        
+        // Fallback timeout (if Flutter takes too long)
+        setTimeout(() => {
+          if (!this.isFlutterReady) {
+            console.warn('Flutter loading timeout, hiding loading screen');
+            this.hideLoading();
+          }
+        }, 15000); // 15 second max wait
+      }
+      
+      setupFlutterListeners() {
+        // Listen for Flutter first frame
+        window.addEventListener('flutter-first-frame', () => {
+          console.log('Flutter first frame rendered');
+          this.isFlutterReady = true;
+          this.progress = 100;
+          this.updateProgress();
+          setTimeout(() => this.hideLoading(), 500);
+        });
+        
+        // Listen for Flutter engine ready
+        window.addEventListener('flutter-engine-ready', () => {
+          console.log('Flutter engine ready');
+          this.progress = Math.max(this.progress, 80);
+          this.updateProgress();
+        });
+        
+        // Check if Flutter app is already loaded
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            // Check if Flutter widgets are rendered
+            const flutterViews = document.querySelectorAll('flt-glass-pane, flutter-view');
+            if (flutterViews.length > 0 && !this.isFlutterReady) {
+              console.log('Flutter views detected');
+              this.isFlutterReady = true;
+              this.hideLoading();
+            }
+          }, 1000);
+        });
+        
+        // Additional check for Flutter app readiness
+        const checkFlutterReady = () => {
+          if (window.flutterAppReady || document.querySelector('flutter-view')) {
+            this.isFlutterReady = true;
+            this.hideLoading();
+            return;
+          }
+          
+          // Check for flt-glass-pane which indicates Flutter is rendering
+          const glassPane = document.querySelector('flt-glass-pane');
+          if (glassPane && glassPane.children.length > 0) {
+            this.isFlutterReady = true;
+            this.hideLoading();
+            return;
+          }
+          
+          setTimeout(checkFlutterReady, 100);
+        };
+        
+        setTimeout(checkFlutterReady, 2000);
+      }
+      
+      simulateProgress() {
+        const interval = setInterval(() => {
+          if (this.isFlutterReady && this.progress >= 100) {
+            clearInterval(interval);
+            return;
+          }
+          
+          // Simulate realistic loading progress
+          const elapsed = Date.now() - this.startTime;
+          const targetProgress = Math.min(90, (elapsed / 8000) * 100); // 90% in 8 seconds max
+          
+          if (this.progress < targetProgress) {
+            this.progress += Math.random() * 3 + 1;
+            this.progress = Math.min(this.progress, targetProgress);
+            this.updateProgress();
+          }
+          
+          // Update status message
+          const statusIndex = Math.min(
+            Math.floor((this.progress / 100) * this.statusMessages.length),
+            this.statusMessages.length - 1
+          );
+          
+          if (statusIndex !== this.currentStatus) {
+            this.currentStatus = statusIndex;
+            this.statusElement.textContent = this.statusMessages[statusIndex];
+          }
+        }, 100);
+      }
+      
+      updateProgress() {
+        if (this.progressBar) {
+          this.progressBar.style.width = this.progress + '%';
+        }
+      }
+      
+      hideLoading() {
+        if (this.loadingElement) {
+          this.loadingElement.classList.add('fade-out');
+          
+          setTimeout(() => {
+            this.loadingElement.style.display = 'none';
+            
+            // Show Flutter app
+            const flutterApp = document.getElementById('flutter-app');
+            if (flutterApp) {
+              flutterApp.classList.add('loaded');
+            }
+            
+            // Mark glass panes as ready
+            const glassPanes = document.querySelectorAll('flt-glass-pane');
+            glassPanes.forEach(pane => pane.classList.add('ready'));
+            
+            // Show download button after app loads
+            setTimeout(() => {
+              const downloadBtn = document.getElementById('download-btn');
+              if (downloadBtn) {
+                downloadBtn.style.display = 'flex';
+                downloadBtn.style.animation = 'fadeInUp 0.5s ease-out';
+              }
+            }, 1000);
+            
+          }, 500);
+        }
+      }
+    }
+    
+    // Initialize loading manager
+    const loadingManager = new LoadingManager();
+    
+    // Modern Flutter service worker registration using flutter.js bootstrapping
+    window.addEventListener('load', function() {
+      // Let Flutter handle service worker registration automatically
+      // This replaces the deprecated manual registration method
+      if ('serviceWorker' in navigator) {
+        console.log('Service worker support detected - will be handled by Flutter bootstrap');
+      }
+    });
+  </script>
+  
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

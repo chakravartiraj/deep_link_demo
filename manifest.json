@@ -1,0 +1,83 @@
+{
+    "name": "Deep Link Demo - Fast Navigation Experience",
+    "short_name": "Deep Link Demo",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#764ba2",
+    "description": "Experience seamless navigation with deep linking capabilities. Optimized for performance and user experience.",
+    "orientation": "portrait-primary",
+    "categories": ["navigation", "utilities", "productivity"],
+    "lang": "en",
+    "scope": "/",
+    "id": "deep-link-demo-pwa",
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Home",
+            "short_name": "Home",
+            "description": "Go to home page",
+            "url": "/home",
+            "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Profile",
+            "short_name": "Profile",
+            "description": "View profile",
+            "url": "/profile",
+            "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Reports",
+            "short_name": "Reports",
+            "description": "View reports",
+            "url": "/report",
+            "icons": [{ "src": "icons/Icon-192.png", "sizes": "192x192" }]
+        }
+    ],
+    "screenshots": [],
+    "prefer_related_applications": false,
+    "related_applications": [
+        {
+            "platform": "play",
+            "id": "com.example.myapp"
+        }
+    ],
+    "protocol_handlers": [
+        {
+            "protocol": "web+myapp",
+            "url": "/?action=%s"
+        }
+    ],
+    "edge_side_panel": {
+        "preferred_width": 412
+    },
+    "launch_handler": {
+        "client_mode": "focus-existing"
+    }
+}
