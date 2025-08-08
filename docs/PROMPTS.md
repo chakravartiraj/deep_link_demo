@@ -37,3 +37,5 @@ reorganize the lib/ directory
 Generate app_constants.dart with the App-wide constants and configuration values used in lib/ directory
 
 Use the App-wide constants and configuration values from lib/core/constants/app_constants.dart in every applicable files in the lib/ directory
+
+update the CLI.md to follow which commands to use when based on the scenarios
