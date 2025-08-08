@@ -140,6 +140,10 @@ Copy-Item -Path "build\web\*" -Destination "." -Recurse
 
 ### Regular Development Commits
 ```bash
+
+# Switch to a proper main branch
+git checkout -b main
+
 # Stage all changes
 git add .
 
@@ -148,6 +152,10 @@ git commit -m "docs: enhance CLI.md with comprehensive command descriptions"
 
 # Push to main branch
 git push origin main
+
+# Push the changes to origin main branch and set upstream
+git push -u origin main
+
 ```
 
 ---
