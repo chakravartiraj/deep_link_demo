@@ -4,8 +4,8 @@
     "namespace": "android_app",
     "package_name": "com.example.myapp",
     "sha256_cert_fingerprints": [
-      "PUT_YOUR_RELEASE_SHA256_HERE",
-      "PUT_YOUR_DEBUG_SHA256_HERE"
+      "D4:54:BA:C0:AE:AE:7A:5F:33:63:3F:54:37:16:A7:D5:29:38:F1:77:72:E0:F6:B9:37:D1:89:E5:71:20:60:96",
+      "0E:AB:54:F7:76:B4:C2:0B:3E:37:D1:01:70:09:F8:B9:5F:3B:F6:97:F5:84:1C:6B:14:D8:6E:BD:50:8C:A0:61"
     ]
   }
 }]

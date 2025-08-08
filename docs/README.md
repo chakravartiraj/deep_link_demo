@@ -2,6 +2,17 @@
 
 Welcome to the comprehensive documentation for the **Deep Link Demo** Flutter project. This documentation is organized into logical sections to help you quickly find what you need.
 
+## 🆕 **Latest Session Documentation**
+
+### **🎯 Recent Updates (August 8, 2025)**
+- **[Session Summary](SESSION_SUMMARY.md)** - Complete overview of GitHub Pages deployment and CLI improvements
+- **[GitHub Pages Deployment](GITHUB_PAGES_DEPLOYMENT.md)** - Complete guide for deploying to GitHub Pages
+- **[Certificate Management](CERTIFICATE_MANAGEMENT.md)** - Android certificate generation and deep linking configuration
+- **[APK Testing](APK_TESTING.md)** - Release APK build verification and testing procedures
+- **[CLI Commands](CLI.md)** - Scenario-based command reference for development and deployment
+- **[PWA Optimization](PWA_OPTIMIZATION.md)** - Progressive Web App features and performance optimization
+- **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Solutions for common CLI and deployment issues
+
 ## 📖 **Quick Navigation**
 
 ### **🚀 [01 - Getting Started](./01-getting-started/)**
