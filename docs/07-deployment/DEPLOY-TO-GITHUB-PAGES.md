@@ -54,3 +54,18 @@ This will generate a `build/web/` directory containing your PWA assets.
 ---
 
 Let me know if you want automation scripts for this, or if you want me to copy the build output to docs for you!
+
+---
+
+# Add all the web files and commit to the gh-pages branch:
+git add .
+
+# Commit the PWA deployment:
+git commit -m "🚀 Deploy"
+
+# Push the gh-pages branch to GitHub for deployment
+git push origin gh-pages --force
+
+https://chakravartiraj.github.io/deep_link_demo/
+
+---
