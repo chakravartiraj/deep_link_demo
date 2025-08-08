@@ -88,7 +88,8 @@ git stash pop
 flutter build web --release --base-href "/deep_link_demo/"
 
 # Step 2: Stash the built web app including untracked files
-git add build/web
+git add build/web //Applicable when something is not gitignored.
+git add -f build/web //The build directory is gitignored. Force add it for the stash
 git stash push -m "Flutter web build for deployment"
 
 # Step 3: Switch to the gh-pages branch for deployment
@@ -155,19 +156,6 @@ git push origin main
 
 # Push the changes to origin main branch and set upstream
 git push -u origin main
-```
-
-### Stashing & Unstashing Files & Folders
-```bash
-# Stash the built web app including untracked files
-git add build/web
-
-# The build directory is gitignored. Force add it for the stash
-git add -f build/web
-
-# Stash the built web app with a descriptive message
-git stash push -m "Flutter web build for deployment"
-
 ```
 
 ---
