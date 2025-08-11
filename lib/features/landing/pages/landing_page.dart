@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 import 'package:myapp/core/constants/app_constants.dart';
+import '../../../core/utils/responsive_utils.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -66,19 +67,6 @@ class _LandingPageState extends State<LandingPage>
     super.dispose();
   }
 
-  // Helper method for responsive values
-  T _getResponsiveValue<T>(
-    BuildContext context,
-    T mobile,
-    T tablet,
-    T desktop,
-  ) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth <= 768) return mobile;
-    if (screenWidth <= 1024) return tablet;
-    return desktop;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,34 +115,54 @@ class _LandingPageState extends State<LandingPage>
           children: [
             Positioned(
               top: 100 + math.sin(_floatingAnimation.value) * 20,
-              right: _getResponsiveValue(context, 50.0, 75.0, 100.0),
+              right: ResponsiveUtils.getResponsiveValue<double>(
+                context,
+                mobile: 50.0,
+                tablet: 75.0,
+                desktop: 100.0,
+              ),
               child: _buildFloatingIcon(
                 Icons.link,
-                _getResponsiveValue(context, 40.0, 50.0, 60.0),
+                ResponsiveUtils.getResponsiveValue<double>(
+                  context,
+                  mobile: 40.0,
+                  tablet: 50.0,
+                  desktop: 60.0,
+                ),
               ),
             ),
             Positioned(
               top: 200 + math.cos(_floatingAnimation.value + 1) * 15,
-              left: _getResponsiveValue(context, 25.0, 35.0, 50.0),
+              left: ResponsiveUtils.getResponsiveValue<double>(
+                context,
+                mobile: 25.0,
+                tablet: 35.0,
+                desktop: 50.0,
+              ),
               child: _buildFloatingIcon(
                 Icons.mobile_friendly,
-                _getResponsiveValue(context, 30.0, 35.0, 40.0),
+                ResponsiveUtils.getResponsiveValue<double>(
+                  context,
+                  mobile: 30.0,
+                  tablet: 35.0,
+                  desktop: 40.0,
+                ),
               ),
             ),
             Positioned(
               bottom: 200 + math.sin(_floatingAnimation.value + 2) * 25,
-              right: _getResponsiveValue(context, 100.0, 150.0, 200.0),
+              right: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 100.0, tablet: 150.0, desktop: 200.0),
               child: _buildFloatingIcon(
                 Icons.web,
-                _getResponsiveValue(context, 35.0, 42.0, 50.0),
+                ResponsiveUtils.getResponsiveValue<double>(context, mobile: 35.0, tablet: 42.0, desktop: 50.0),
               ),
             ),
             Positioned(
               bottom: 100 + math.cos(_floatingAnimation.value + 3) * 18,
-              left: _getResponsiveValue(context, 75.0, 110.0, 150.0),
+              left: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 75.0, tablet: 110.0, desktop: 150.0),
               child: _buildFloatingIcon(
                 Icons.integration_instructions,
-                _getResponsiveValue(context, 32.0, 38.0, 45.0),
+                ResponsiveUtils.getResponsiveValue<double>(context, mobile: 32.0, tablet: 38.0, desktop: 45.0),
               ),
             ),
           ],
@@ -171,14 +179,14 @@ class _LandingPageState extends State<LandingPage>
           scale: _pulseAnimation.value,
           child: Container(
             padding: EdgeInsets.all(
-              _getResponsiveValue(context, 15.0, 18.0, 20.0),
+              ResponsiveUtils.getResponsiveValue<double>(context, mobile: 15.0, tablet: 18.0, desktop: 20.0),
             ),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(size / 2),
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.2),
-                width: _getResponsiveValue(context, 1.5, 1.8, 2.0),
+                width: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 1.5, tablet: 1.8, desktop: 2.0),
               ),
             ),
             child: Icon(
@@ -205,8 +213,8 @@ class _LandingPageState extends State<LandingPage>
                 minHeight: MediaQuery.of(context).size.height,
               ),
               padding: EdgeInsets.symmetric(
-                horizontal: _getResponsiveValue(context, 20.0, 40.0, 60.0),
-                vertical: _getResponsiveValue(context, 40.0, 60.0, 60.0),
+                horizontal: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 40.0, desktop: 60.0),
+                vertical: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 40.0, tablet: 60.0, desktop: 60.0),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -219,17 +227,17 @@ class _LandingPageState extends State<LandingPage>
                       return Transform.rotate(
                         angle: value * 2 * math.pi,
                         child: Container(
-                          width: _getResponsiveValue(
+                          width: ResponsiveUtils.getResponsiveValue<double>(
                             context,
-                            80.0,
-                            100.0,
-                            120.0,
+                            mobile: 80.0,
+                            tablet: 100.0,
+                            desktop: 120.0,
                           ),
-                          height: _getResponsiveValue(
+                          height: ResponsiveUtils.getResponsiveValue<double>(
                             context,
-                            80.0,
-                            100.0,
-                            120.0,
+                            mobile: 80.0,
+                            tablet: 100.0,
+                            desktop: 120.0,
                           ),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -249,11 +257,11 @@ class _LandingPageState extends State<LandingPage>
                           ),
                           child: Icon(
                             Icons.link,
-                            size: _getResponsiveValue(
+                            size: ResponsiveUtils.getResponsiveValue<double>(
                               context,
-                              40.0,
-                              50.0,
-                              60.0,
+                              mobile: 40.0,
+                              tablet: 50.0,
+                              desktop: 60.0,
                             ),
                             color: Color(0xFF667eea),
                           ),
@@ -262,14 +270,19 @@ class _LandingPageState extends State<LandingPage>
                     },
                   ),
                   SizedBox(
-                    height: _getResponsiveValue(context, 20.0, 25.0, 30.0),
+                    height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0),
                   ),
 
                   // Main title
                   Text(
                     AppConstants.appName,
                     style: GoogleFonts.poppins(
-                      fontSize: _getResponsiveValue(context, 32.0, 48.0, 56.0),
+                      fontSize: ResponsiveUtils.getResponsiveValue<double>(
+                        context,
+                        mobile: 32.0,
+                        tablet: 48.0,
+                        desktop: 56.0,
+                      ),
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       shadows: [
@@ -283,28 +296,43 @@ class _LandingPageState extends State<LandingPage>
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: _getResponsiveValue(context, 10.0, 12.0, 15.0),
+                    height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 10.0, tablet: 12.0, desktop: 15.0),
                   ),
 
                   // Subtitle
                   Text(
                     'Master Flutter Deep Linking with Beautiful Animations',
                     style: GoogleFonts.lato(
-                      fontSize: _getResponsiveValue(context, 16.0, 20.0, 24.0),
+                      fontSize: ResponsiveUtils.getResponsiveValue<double>(
+                        context,
+                        mobile: 16.0,
+                        tablet: 20.0,
+                        desktop: 24.0,
+                      ),
                       color: Colors.white.withValues(alpha: 0.9),
                       fontWeight: FontWeight.w300,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: _getResponsiveValue(context, 25.0, 30.0, 35.0),
+                    height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 25.0, tablet: 30.0, desktop: 35.0),
                   ),
 
                   // CTA Buttons
                   Wrap(
                     alignment: WrapAlignment.center,
-                    spacing: _getResponsiveValue(context, 15.0, 18.0, 20.0),
-                    runSpacing: _getResponsiveValue(context, 12.0, 15.0, 15.0),
+                    spacing: ResponsiveUtils.getResponsiveValue<double>(
+                      context,
+                      mobile: 15.0,
+                      tablet: 18.0,
+                      desktop: 20.0,
+                    ),
+                    runSpacing: ResponsiveUtils.getResponsiveValue<double>(
+                      context,
+                      mobile: 12.0,
+                      tablet: 15.0,
+                      desktop: 18.0,
+                    ),
                     children: [
                       _buildAnimatedButton(
                         'Try Demo',
@@ -354,11 +382,11 @@ class _LandingPageState extends State<LandingPage>
                   ? null
                   : const BorderSide(color: Colors.white, width: 2),
               padding: EdgeInsets.symmetric(
-                horizontal: _getResponsiveValue(context, 20.0, 25.0, 30.0),
-                vertical: _getResponsiveValue(context, 12.0, 13.0, 15.0),
+                horizontal: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0),
+                vertical: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 12.0, tablet: 13.0, desktop: 15.0),
               ),
               textStyle: GoogleFonts.poppins(
-                fontSize: _getResponsiveValue(context, 16.0, 17.0, 18.0),
+                fontSize: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 16.0, tablet: 17.0, desktop: 18.0),
                 fontWeight: FontWeight.w600,
               ),
               shape: RoundedRectangleBorder(
@@ -374,21 +402,23 @@ class _LandingPageState extends State<LandingPage>
 
   Widget _buildFeaturesSection() {
     return Container(
-      padding: EdgeInsets.all(_getResponsiveValue(context, 30.0, 50.0, 60.0)),
+      padding: EdgeInsets.all(
+        ResponsiveUtils.getResponsiveValue<double>(context, mobile: 30.0, tablet: 50.0, desktop: 60.0),
+      ),
       child: Column(
         children: [
           Text(
             'Features',
             style: GoogleFonts.poppins(
-              fontSize: _getResponsiveValue(context, 32.0, 40.0, 48.0),
+              fontSize: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 32.0, tablet: 40.0, desktop: 48.0),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: _getResponsiveValue(context, 30.0, 40.0, 50.0)),
+          SizedBox(height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 30.0, tablet: 40.0, desktop: 50.0)),
           Wrap(
-            spacing: _getResponsiveValue(context, 20.0, 25.0, 30.0),
-            runSpacing: _getResponsiveValue(context, 20.0, 25.0, 30.0),
+            spacing: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0),
+            runSpacing: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0),
             children: [
               _buildFeatureCard(
                 Icons.mobile_friendly,
@@ -436,8 +466,8 @@ class _LandingPageState extends State<LandingPage>
           child: Opacity(
             opacity: value.clamp(0.0, 1.0),
             child: Container(
-              width: _getResponsiveValue(context, 280.0, 300.0, 320.0),
-              height: _getResponsiveValue(context, 180.0, 190.0, 200.0),
+              width: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 280.0, tablet: 300.0, desktop: 320.0),
+              height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 180.0, tablet: 190.0, desktop: 200.0),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
@@ -455,37 +485,57 @@ class _LandingPageState extends State<LandingPage>
               ),
               child: Padding(
                 padding: EdgeInsets.all(
-                  _getResponsiveValue(context, 14.0, 16.0, 18.0),
+                  ResponsiveUtils.getResponsiveValue<double>(context, mobile: 14.0, tablet: 16.0, desktop: 18.0),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: _getResponsiveValue(context, 40.0, 45.0, 50.0),
-                      height: _getResponsiveValue(context, 40.0, 45.0, 50.0),
+                      width: ResponsiveUtils.getResponsiveValue<double>(
+                        context,
+                        mobile: 40.0,
+                        tablet: 45.0,
+                        desktop: 50.0,
+                      ),
+                      height: ResponsiveUtils.getResponsiveValue<double>(
+                        context,
+                        mobile: 40.0,
+                        tablet: 45.0,
+                        desktop: 50.0,
+                      ),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(
-                          _getResponsiveValue(context, 8.0, 10.0, 12.0),
+                          ResponsiveUtils.getResponsiveValue<double>(context, mobile: 8.0, tablet: 10.0, desktop: 12.0),
                         ),
                       ),
                       child: Icon(
                         icon,
-                        size: _getResponsiveValue(context, 20.0, 24.0, 26.0),
+                        size: ResponsiveUtils.getResponsiveValue<double>(
+                          context,
+                          mobile: 20.0,
+                          tablet: 24.0,
+                          desktop: 26.0,
+                        ),
                         color: color,
                       ),
                     ),
                     SizedBox(
-                      height: _getResponsiveValue(context, 8.0, 10.0, 12.0),
+                      height: ResponsiveUtils.getResponsiveValue<double>(
+                        context,
+                        mobile: 8.0,
+                        tablet: 10.0,
+                        desktop: 12.0,
+                      ),
                     ),
                     Text(
                       title,
                       style: GoogleFonts.poppins(
-                        fontSize: _getResponsiveValue(
+                        fontSize: ResponsiveUtils.getResponsiveValue<double>(
                           context,
-                          14.0,
-                          15.0,
-                          16.0,
+                          mobile: 14.0,
+                          tablet: 15.0,
+                          desktop: 16.0,
                         ),
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -493,16 +543,16 @@ class _LandingPageState extends State<LandingPage>
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(
-                      height: _getResponsiveValue(context, 4.0, 5.0, 6.0),
+                      height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 4.0, tablet: 5.0, desktop: 6.0),
                     ),
                     Text(
                       description,
                       style: GoogleFonts.lato(
-                        fontSize: _getResponsiveValue(
+                        fontSize: ResponsiveUtils.getResponsiveValue<double>(
                           context,
-                          10.0,
-                          11.0,
-                          12.0,
+                          mobile: 10.0,
+                          tablet: 11.0,
+                          desktop: 12.0,
                         ),
                         color: Colors.white.withValues(alpha: 0.8),
                         height: 1.1,
@@ -523,18 +573,20 @@ class _LandingPageState extends State<LandingPage>
 
   Widget _buildTutorialSection() {
     return Container(
-      padding: EdgeInsets.all(_getResponsiveValue(context, 30.0, 50.0, 60.0)),
+      padding: EdgeInsets.all(
+        ResponsiveUtils.getResponsiveValue<double>(context, mobile: 30.0, tablet: 50.0, desktop: 60.0),
+      ),
       child: Column(
         children: [
           Text(
             'Quick Tutorial',
             style: GoogleFonts.poppins(
-              fontSize: _getResponsiveValue(context, 32.0, 40.0, 48.0),
+              fontSize: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 32.0, tablet: 40.0, desktop: 48.0),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: _getResponsiveValue(context, 30.0, 40.0, 50.0)),
+          SizedBox(height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 30.0, tablet: 40.0, desktop: 50.0)),
           _buildTutorialStep(1, 'Setup GoRouter', 'Configure your app routing'),
           _buildTutorialStep(
             2,
@@ -554,31 +606,31 @@ class _LandingPageState extends State<LandingPage>
   Widget _buildTutorialStep(int step, String title, String description) {
     return Container(
       margin: EdgeInsets.only(
-        bottom: _getResponsiveValue(context, 20.0, 25.0, 30.0),
+        bottom: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0),
       ),
       child: Row(
         children: [
           Container(
-            width: _getResponsiveValue(context, 50.0, 55.0, 60.0),
-            height: _getResponsiveValue(context, 50.0, 55.0, 60.0),
+            width: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 50.0, tablet: 55.0, desktop: 60.0),
+            height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 50.0, tablet: 55.0, desktop: 60.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(
-                _getResponsiveValue(context, 25.0, 27.5, 30.0),
+                ResponsiveUtils.getResponsiveValue<double>(context, mobile: 25.0, tablet: 27.5, desktop: 30.0),
               ),
             ),
             child: Center(
               child: Text(
                 '$step',
                 style: GoogleFonts.poppins(
-                  fontSize: _getResponsiveValue(context, 20.0, 22.0, 24.0),
+                  fontSize: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 22.0, desktop: 24.0),
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF667eea),
                 ),
               ),
             ),
           ),
-          SizedBox(width: _getResponsiveValue(context, 20.0, 25.0, 30.0)),
+          SizedBox(width: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 20.0, tablet: 25.0, desktop: 30.0)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -586,7 +638,12 @@ class _LandingPageState extends State<LandingPage>
                 Text(
                   title,
                   style: GoogleFonts.poppins(
-                    fontSize: _getResponsiveValue(context, 18.0, 21.0, 24.0),
+                    fontSize: ResponsiveUtils.getResponsiveValue<double>(
+                      context,
+                      mobile: 18.0,
+                      tablet: 21.0,
+                      desktop: 24.0,
+                    ),
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -594,7 +651,12 @@ class _LandingPageState extends State<LandingPage>
                 Text(
                   description,
                   style: GoogleFonts.lato(
-                    fontSize: _getResponsiveValue(context, 14.0, 15.0, 16.0),
+                    fontSize: ResponsiveUtils.getResponsiveValue<double>(
+                      context,
+                      mobile: 14.0,
+                      tablet: 15.0,
+                      desktop: 16.0,
+                    ),
                     color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
@@ -608,17 +670,19 @@ class _LandingPageState extends State<LandingPage>
 
   Widget _buildFooterSection() {
     return Container(
-      padding: EdgeInsets.all(_getResponsiveValue(context, 30.0, 35.0, 40.0)),
+      padding: EdgeInsets.all(
+        ResponsiveUtils.getResponsiveValue<double>(context, mobile: 30.0, tablet: 35.0, desktop: 40.0),
+      ),
       child: Column(
         children: [
           Text(
             'Made with ❤️ using Flutter',
             style: GoogleFonts.lato(
-              fontSize: _getResponsiveValue(context, 14.0, 15.0, 16.0),
+              fontSize: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 14.0, tablet: 15.0, desktop: 16.0),
               color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
-          SizedBox(height: _getResponsiveValue(context, 15.0, 18.0, 20.0)),
+          SizedBox(height: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 15.0, tablet: 18.0, desktop: 20.0)),
           ElevatedButton.icon(
             onPressed: () => context.go('/home'),
             icon: const Icon(Icons.rocket_launch),
@@ -627,8 +691,8 @@ class _LandingPageState extends State<LandingPage>
               backgroundColor: Colors.white,
               foregroundColor: const Color(0xFF667eea),
               padding: EdgeInsets.symmetric(
-                horizontal: _getResponsiveValue(context, 25.0, 28.0, 30.0),
-                vertical: _getResponsiveValue(context, 12.0, 13.0, 15.0),
+                horizontal: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 25.0, tablet: 28.0, desktop: 30.0),
+                vertical: ResponsiveUtils.getResponsiveValue<double>(context, mobile: 12.0, tablet: 13.0, desktop: 15.0),
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),

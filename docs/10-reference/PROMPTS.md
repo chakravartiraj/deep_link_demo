@@ -6,13 +6,20 @@ create a comprehensive documentation in .md files on what we just did
 
 create a beautiful one page landing page in flutter web, with mesmerizing animations and ui components showcasing deep-linking setup & integration tutorial
 
+create a shared utilities folder structure based on clean architecture principles, to house the responsive helper methods. 
+create a proper location and refactor this for reusability across your entire project
+
 replace withOpacity with withValues(alpha:) usage
 
 make sure that the landing page is optimally displayed for tablet web, tab web, mobile web, desktop web
+make sure that the splash page is optimally displayed for tablet web, tab web, mobile web, desktop web
+
+me update the splash page to use the cleaner import
 
 stage all changes including new files and modifications
 stage everything done uptil now.
 commit the staged changes with a comprehensive commit message.
+commit the staged changes with a comprehensive commit message w.r.t. staged changes.
 
 keep the scope of the load speed & time optimization limited to web/ directory
 
